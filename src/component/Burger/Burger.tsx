@@ -7,7 +7,7 @@ import { access } from "fs";
 interface Ingredients {
   cheese: number;
   bacon: number;
-  salat: number;
+  salad: number;
   meat: number;
 }
 

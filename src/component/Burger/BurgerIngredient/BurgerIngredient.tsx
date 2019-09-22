@@ -9,8 +9,8 @@ const BurgerIngredient = (props: { type: string }) => {
     case "top-bread":
       layer = <div className="top-bread" />;
       break;
-    case "salat":
-      layer = <div className="salat" />;
+    case "salad":
+      layer = <div className="salad" />;
       break;
     case "meat":
       layer = <div className="meat" />;

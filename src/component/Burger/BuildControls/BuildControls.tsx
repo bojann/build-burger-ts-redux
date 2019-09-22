@@ -6,52 +6,60 @@ export interface IngredientTypes {
   ingredients: {
     cheese: number;
     bacon: number;
-    salat: number;
+    salad: number;
     meat: number;
     [key: string]: number;
-  },
-  orderPrice: number
+  };
+  orderPrice: number;
 }
 
-export interface EvenHandlersTypes {
-  addIngredients: (label: string | number) => void;
-  removeIngredients: (label: string | number) => void;
-  handleShowOrder?: () => void
+export interface EventHandlersTypes {
+  addIngredients: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  removeIngredients: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  handleShowOrder?: () => void;
 }
 
 export interface IngredientPrices {
   ingredientPrices: {
     cheese: number;
     bacon: number;
-    salat: number;
+    salad: number;
     meat: number;
     [key: string]: number;
-  }
+  };
 }
 
-const BuildControls = (props: IngredientTypes & EvenHandlersTypes & IngredientPrices) => {
-    const ingredients = props.ingredients;
-    const renderControls = () => {
-        return Object.keys(ingredients).map((item: string | any) => {
-            return item ? (
-                <BuildControl
-                    key={item}
-                    label={item}
-                    price={props.ingredientPrices[item]}
-                    addIngredients={props.addIngredients}
-                    removeIngredients={props.removeIngredients}
-                />
-                ) : null;
-        });
-    };
+const BuildControls = (
+  props: IngredientTypes & EventHandlersTypes & IngredientPrices
+) => {
+  const ingredients = props.ingredients;
+  const renderControls = () => {
+    return Object.keys(ingredients).map((item: string | any) => {
+      return item ? (
+        <BuildControl
+          key={item}
+          label={item}
+          price={props.ingredientPrices[item]}
+          addIngredients={props.addIngredients}
+          removeIngredients={props.removeIngredients}
+        />
+      ) : null;
+    });
+  };
+  console.log('props.orderPrice',props.orderPrice)
+  const totalPriceNum = props.orderPrice ? props.orderPrice.toFixed(2) : 0;
 
-    return (
-        <div className="build-burger-controls">
-            <span><strong>Total Price: $ {props.orderPrice.toFixed(2)}</strong></span>
-            {renderControls()}
-            <button className="btn order-btn" onClick={props.handleShowOrder}>Order now</button>
-        </div>
-    );
+  return (
+    <div className="build-burger-controls">
+      <span>
+        Total Price: <span data-testid="total-price">$ {totalPriceNum}</span>
+      </span>
+      {renderControls()}
+      <button className="btn order-btn" onClick={props.handleShowOrder}>
+        Order now
+      </button>
+    </div>
+  );
 };
 
 export default BuildControls;

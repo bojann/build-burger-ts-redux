@@ -3,23 +3,26 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/core": "^10.0.17",
     "@types/jest": "23.3.13",
     "@types/node": "10.12.18",
     "@types/react": "16.7.20",
     "@types/react-dom": "16.0.11",
     "@types/react-router-dom": "^4.3.1",
     "classnames": "^2.2.6",
-    "node-sass": "^4.11.0",
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
+    "node-sass": "^4.12.0",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^3.1.1",
+    "react-test-renderer": "^16.9.0",
     "typescript": "3.2.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "coverage": "npm test -- --coverage",
     "eject": "react-scripts eject",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx}\"",
     "lint": "tslint \"src/**/*.{ts,tsx}\""
@@ -34,6 +37,10 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@testing-library/dom": "^6.2.0",
+    "@testing-library/jest-dom": "^4.1.0",
+    "@testing-library/react": "^9.1.4",
+    "@testing-library/user-event": "^7.0.1",
     "prettier": "^1.16.4",
     "react-app-rewire-hot-loader": "^1.0.3",
     "react-app-rewired": "^2.0.2",
