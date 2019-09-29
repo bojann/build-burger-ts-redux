@@ -10,8 +10,7 @@ const handleModalClose = jest.fn();
 const handlePurchase = jest.fn();
 let getByText;
 
-describe('++++++++ OrderSummary modal box', () => {
-    
+describe('++++++++ OrderSummary modal box', () => { 
     beforeEach(() => {
         const order = render(<OrderSummary
             ingredients={ingredients}
@@ -31,8 +30,6 @@ describe('++++++++ OrderSummary modal box', () => {
         fireEvent.click(getByText(/x/i));
         expect(handleModalClose).toBeCalledTimes(1);
     })
-
-    
 })
 
 test('Closing OrderSummary modal box on button Cancel', () => {
