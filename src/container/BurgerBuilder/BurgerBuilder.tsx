@@ -3,6 +3,7 @@ import Burger from "../../component/Burger/Burger";
 import BuildControls from "../../component/Burger/BuildControls/BuildControls";
 import Modal from "../../component/shared/Modal/Modal";
 import OrderSummary from "../../component/Burger/OrderSummery/OrderSummery";
+import axiosServices from "../../services/shared/axios-service"
 
 interface Ingredients {
   salad: number;
@@ -103,8 +104,25 @@ export default class BurgerBuilder extends React.Component<{}, State> {
   };
 
   public handlePurchase = () => {
+    const order = {
+      ingredients: this.state.ingredients,
+      orice: this.state.orderPrice,
+      customer: {
+        name: "Jan Kowalski",
+        address: {
+          street: "test1",
+          zipCode: "2132",
+          country: "Poland",
+        },
+      },
+      deliveryMethod: 'fast',
+    }
     console.log("Purchase done");
     this.handleModalClose();
+
+    axiosServices.post("/order.json", order)
+    .then(response => console.log('RESPONSE: ', response))
+    .catch(error => console.error(error))
   };
 
   public render() {
