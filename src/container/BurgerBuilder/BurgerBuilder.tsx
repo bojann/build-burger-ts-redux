@@ -3,7 +3,8 @@ import Burger from "../../component/Burger/Burger";
 import BuildControls from "../../component/Burger/BuildControls/BuildControls";
 import Modal from "../../component/shared/Modal/Modal";
 import OrderSummary from "../../component/Burger/OrderSummery/OrderSummery";
-import axiosServices from "../../services/shared/axios-service"
+import axiosServices from "../../services/shared/axios-service";
+import Spinner from "../../component/shared/Spinner/Spinner"
 
 interface Ingredients {
   salad: number;
@@ -23,6 +24,7 @@ interface State {
   initialPrice: number;
   orderPrice: number;
   orderModalShow: boolean;
+  loading: boolean;
 }
 
 export default class BurgerBuilder extends React.Component<{}, State> {
@@ -41,7 +43,8 @@ export default class BurgerBuilder extends React.Component<{}, State> {
     },
     initialPrice: 5,
     orderPrice: 5,
-    orderModalShow: false
+    orderModalShow: false,
+    loading: true,
   };
 
   public handleAddIngredients = (event:React.MouseEvent<HTMLButtonElement, MouseEvent>):void => {
@@ -121,11 +124,35 @@ export default class BurgerBuilder extends React.Component<{}, State> {
     this.handleModalClose();
 
     axiosServices.post("/order.json", order)
-    .then(response => console.log('RESPONSE: ', response))
-    .catch(error => console.error(error))
+    .then(response => {
+      console.log('RESPONSE: ', response)
+      this.setState({
+        loading: false,
+        orderModalShow: false,
+      })
+    })
+    .catch(error => {
+      console.error(error)
+      this.setState({
+        loading: false,
+        orderModalShow: false,
+      })
+    })
   };
 
   public render() {
+    let orderSummary = <Spinner />
+    if (!this.state.loading) {
+      orderSummary = (
+        <OrderSummary
+            ingredients={this.state.ingredients}
+            orderPrice={this.state.orderPrice}
+            handleModalClose={this.handleModalClose}
+            handlePurchase={this.handlePurchase}
+          />
+      )
+    }
+
     return (
       <>
         <Burger ingredients={this.state.ingredients} />
@@ -141,12 +168,7 @@ export default class BurgerBuilder extends React.Component<{}, State> {
           orderModalShow={this.state.orderModalShow}
           handleModalClose={this.handleModalClose}
         >
-          <OrderSummary
-            ingredients={this.state.ingredients}
-            orderPrice={this.state.orderPrice}
-            handleModalClose={this.handleModalClose}
-            handlePurchase={this.handlePurchase}
-          />
+          {orderSummary}
         </Modal>
       </>
     );
