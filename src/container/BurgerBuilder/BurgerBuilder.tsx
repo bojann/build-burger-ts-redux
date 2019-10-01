@@ -44,7 +44,7 @@ export default class BurgerBuilder extends React.Component<{}, State> {
     initialPrice: 5,
     orderPrice: 5,
     orderModalShow: false,
-    loading: true,
+    loading: false,
   };
 
   public handleAddIngredients = (event:React.MouseEvent<HTMLButtonElement, MouseEvent>):void => {
@@ -121,8 +121,11 @@ export default class BurgerBuilder extends React.Component<{}, State> {
       deliveryMethod: 'fast',
     }
     console.log("Purchase done");
+    this.setState({
+      loading: true,
+    })
     this.handleModalClose();
-
+    
     axiosServices.post("/order.json", order)
     .then(response => {
       console.log('RESPONSE: ', response)
@@ -141,16 +144,16 @@ export default class BurgerBuilder extends React.Component<{}, State> {
   };
 
   public render() {
-    let orderSummary = <Spinner />
-    if (!this.state.loading) {
-      orderSummary = (
-        <OrderSummary
-            ingredients={this.state.ingredients}
-            orderPrice={this.state.orderPrice}
-            handleModalClose={this.handleModalClose}
-            handlePurchase={this.handlePurchase}
-          />
-      )
+    let orderSummary = (
+      <OrderSummary
+          ingredients={this.state.ingredients}
+          orderPrice={this.state.orderPrice}
+          handleModalClose={this.handleModalClose}
+          handlePurchase={this.handlePurchase}
+        />
+    )
+    if (this.state.loading) {
+      orderSummary = <Spinner />;
     }
 
     return (

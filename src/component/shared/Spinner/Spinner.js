@@ -1,7 +1,21 @@
 import React from "react"
 import styled from "@emotion/styled"
+import { keyframes } from "@emotion/core";
 
+const SpinAnimation= keyframes`
+    {
+        0% {
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+        100% {
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
+    }
+`
 const SPINNER = styled("div")`
+    background: #da9c2a;
     margin: 60px auto;
     font-size: 10px;
     position: relative;
@@ -9,39 +23,19 @@ const SPINNER = styled("div")`
     border-top: 1.1em solid rgba(255, 255, 255, 0.2);
     border-right: 1.1em solid rgba(255, 255, 255, 0.2);
     border-bottom: 1.1em solid rgba(255, 255, 255, 0.2);
-    border-left: 1.1em solid #ffffff;
+    border-left: 1.1em solid #a96327;
     -webkit-transform: translateZ(0);
     -ms-transform: translateZ(0);
     transform: translateZ(0);
-    -webkit-animation: load8 1.1s infinite linear;
-    animation: load8 1.1s infinite linear;
+    -webkit-animation: ${SpinAnimation} 1.1s infinite linear;
+    animation: ${SpinAnimation} 1.1s infinite linear;
 
-    &:after {
-        "border-radius": 50%;
+    &, &:after {
+        border-radius: 50%;
         width: 10em;
         height: 10em;
     }
-
-    @-webkit-keyframes load8 {
-        0% {
-            -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-        }
-        100% {
-            -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-        }
-    }
-    @keyframes load8 {
-        0% {
-            -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-        }
-        100% {
-            -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-        }
-    }`
+`
 
 const spinner = (props) => (
     <SPINNER>Loading...</SPINNER>
