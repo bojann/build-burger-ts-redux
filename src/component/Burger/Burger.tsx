@@ -3,19 +3,13 @@ import BurgerIngredient from "./BurgerIngredient/BurgerIngredient";
 
 import "./Burger.scss";
 import { access } from "fs";
+import { IngredientsTypes } from "../../container/BurgerBuilder/BurgerBuilder"
 
-interface Ingredients {
-  cheese: number;
-  bacon: number;
-  salad: number;
-  meat: number;
+interface IngredientsTypesObj {
+  ingredients: IngredientsTypes;
 }
 
-interface IngredientsTypes {
-  ingredients: Ingredients;
-}
-
-const Burger = (props: IngredientsTypes) => {
+const Burger = (props: IngredientsTypesObj) => {
   const renderIngredients = () => {
     const ingredients = props.ingredients;
 
@@ -23,7 +17,7 @@ const Burger = (props: IngredientsTypes) => {
       .map(
         (igKey: string): string[] => {
           const igAmount: number = ingredients[igKey];
-          let igQuantity: string[] = [];
+          const igQuantity: string[] = [];
           for (let i = 0; i < igAmount; i++) {
             igQuantity.push(igKey);
           }

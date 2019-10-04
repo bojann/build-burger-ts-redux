@@ -9,7 +9,7 @@ export interface IngredientTypes {
     salad: number;
     meat: number;
     [key: string]: number;
-  };
+  } | {};
   orderPrice: number;
 }
 

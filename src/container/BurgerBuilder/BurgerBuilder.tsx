@@ -6,11 +6,12 @@ import OrderSummary from "../../component/Burger/OrderSummery/OrderSummery";
 import axiosServices from "../../services/shared/axios-service";
 import Spinner from "../../component/shared/Spinner/Spinner"
 
-interface Ingredients {
-  salad: number;
-  bacon: number;
-  cheese: number;
-  meat: number;
+export interface IngredientsTypes {
+  salad?: number;
+  bacon?: number;
+  cheese?: number;
+  meat?: number;
+  price?: number,
 }
 interface IngredientPrices {
   salad: number;
@@ -19,7 +20,7 @@ interface IngredientPrices {
   meat: number;
 }
 interface State {
-  ingredients: Ingredients;
+  ingredients: IngredientsTypes | {};
   ingredientPrices: IngredientPrices;
   initialPrice: number;
   orderPrice: number;
@@ -29,12 +30,7 @@ interface State {
 
 export default class BurgerBuilder extends React.Component<{}, State> {
   public state = {
-    ingredients: {
-      salad: 0,
-      bacon: 0,
-      cheese: 0,
-      meat: 0
-    },
+    ingredients: {},
     ingredientPrices: {
       salad: 0.5,
       bacon: 0.65,
@@ -47,9 +43,27 @@ export default class BurgerBuilder extends React.Component<{}, State> {
     loading: false,
   };
 
+  public componentDidMount(): void {
+    this.setState({
+      loading: true,
+    });
+
+    axiosServices.get("/ingredients.json")
+      .then((response) => {
+        this.setState({
+          loading: false,
+          ingredients: response.data,
+        })
+      })
+      .catch(error => {
+
+      })
+  }
+
   public handleAddIngredients = (event:React.MouseEvent<HTMLButtonElement, MouseEvent>):void => {
     const label = event.currentTarget.dataset.ingredient;
-    if (label) {
+
+    if (label && Object.keys(this.state.ingredients)) {
        const newIngredients = { ...this.state.ingredients };
       const initialPrice = this.state.initialPrice;
       newIngredients[label] = newIngredients[label] + 1;
@@ -109,7 +123,7 @@ export default class BurgerBuilder extends React.Component<{}, State> {
   public handlePurchase = () => {
     const order = {
       ingredients: this.state.ingredients,
-      orice: this.state.orderPrice,
+      price: this.state.orderPrice,
       customer: {
         name: "Jan Kowalski",
         address: {
@@ -125,10 +139,9 @@ export default class BurgerBuilder extends React.Component<{}, State> {
       loading: true,
     })
     this.handleModalClose();
-    
+
     axiosServices.post("/order.json", order)
     .then(response => {
-      console.log('RESPONSE: ', response)
       this.setState({
         loading: false,
         orderModalShow: false,
@@ -144,6 +157,19 @@ export default class BurgerBuilder extends React.Component<{}, State> {
   };
 
   public render() {
+    let burgerLayout = (
+      <>
+        <Burger ingredients={this.state.ingredients} />
+        <BuildControls
+            ingredients={this.state.ingredients}
+            ingredientPrices={this.state.ingredientPrices}
+            orderPrice={this.state.orderPrice}
+            addIngredients={this.handleAddIngredients}
+            removeIngredients={this.handleRemoveIngredients}
+            handleShowOrder={this.handleShowOrder}
+        />
+      </>
+    )
     let orderSummary = (
       <OrderSummary
           ingredients={this.state.ingredients}
@@ -153,20 +179,13 @@ export default class BurgerBuilder extends React.Component<{}, State> {
         />
     )
     if (this.state.loading) {
-      orderSummary = <Spinner />;
+      orderSummary = <Spinner classNames={false} />;
+      burgerLayout = <Spinner classNames={{top: "30%", background: "orange" }} />
     }
 
     return (
       <>
-        <Burger ingredients={this.state.ingredients} />
-        <BuildControls
-          ingredients={this.state.ingredients}
-          ingredientPrices={this.state.ingredientPrices}
-          orderPrice={this.state.orderPrice}
-          addIngredients={this.handleAddIngredients}
-          removeIngredients={this.handleRemoveIngredients}
-          handleShowOrder={this.handleShowOrder}
-        />
+        { burgerLayout }
         <Modal
           orderModalShow={this.state.orderModalShow}
           handleModalClose={this.handleModalClose}
