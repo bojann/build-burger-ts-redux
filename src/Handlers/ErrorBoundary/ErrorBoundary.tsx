@@ -2,7 +2,7 @@ import React from "react"
 import styled from "@emotion/styled"
 
 interface Props {
-    errorMsg: string,
+    errorMsg?: string,
 }
 interface State {
     hasError: boolean,
@@ -10,7 +10,7 @@ interface State {
     errorInfo: React.ErrorInfo | null,
 }
 
-const ERROR_DIV = styled("div")`
+const ERRORDIV = styled("div")`
     font-size: 2rem;
     color: red;
     padding: 10px;
@@ -24,8 +24,8 @@ export default class ErrorBoundary extends React.Component<Props, State> {
         errorInfo: null,
     };
     public componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
-        console.log('%c log error  BA: ', 'background: yellow;', error);
-        console.log('%c log errorInfo BA: ', 'background: orange;', errorInfo);
+        console.error('%c log error  BA: ', 'background: yellow;', error);
+        console.error('%c log errorInfo BA: ', 'background: orange;', errorInfo);
         this.setState({
             hasError: true,
             error,
@@ -35,9 +35,9 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 
     public render() {
         if (this.state.hasError && this.props.errorMsg) {
-            return <ERROR_DIV>{this.props.errorMsg}</ERROR_DIV>
+            return <ERRORDIV>{this.props.errorMsg}</ERRORDIV>
         } else if (this.state.hasError) {
-            return <ERROR_DIV>Something went wrong.</ERROR_DIV>
+            return <ERRORDIV>Something went wrong.</ERRORDIV>
         }
         return this.props.children;
     }

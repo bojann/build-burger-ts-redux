@@ -2,7 +2,6 @@ import React from "react";
 import BurgerIngredient from "./BurgerIngredient/BurgerIngredient";
 
 import "./Burger.scss";
-import { access } from "fs";
 import { IngredientsTypes } from "../../container/BurgerBuilder/BurgerBuilder"
 
 interface IngredientsTypesObj {

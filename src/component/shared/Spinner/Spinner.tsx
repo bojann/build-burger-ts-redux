@@ -2,6 +2,14 @@ import React from "react"
 import styled from "@emotion/styled"
 import { keyframes } from "@emotion/core";
 
+interface ClassNamesPropType {
+    top?: string,
+    background?: string, 
+}
+type ClassNamesType = {
+    classNames: ClassNamesPropType,
+}
+
 const SpinAnimation= keyframes`
     {
         0% {
@@ -14,10 +22,10 @@ const SpinAnimation= keyframes`
         }
     }
 `
-const SPINNER = styled("div")`
+const SPINNER = styled("div")<any>`
     position: absolute;
-    top: ${ props => props.classNames && props.classNames.top ? props.classNames.top : "initial" };
-    background: ${ props =>  props.classNames && props.classNames.background ? props.classNames.background : "#da9c2a" };
+    top: ${ (props: ClassNamesType) => props.classNames && props.classNames.top ? props.classNames.top : "initial" };
+    background: ${ (props: ClassNamesType) =>  props.classNames && props.classNames.background ? props.classNames.background : "#da9c2a" };
     left: calc(50% - 50px);
     margin: 60px auto;
     font-size: 10px;
@@ -40,7 +48,7 @@ const SPINNER = styled("div")`
     }
 `
 
-const spinner = ({classNames}) => (
+const spinner = ({classNames}: any) => (
     <div style={{position: "relative", height: "100vh", width: "100vw" }}>
         <SPINNER classNames={classNames}>Loading...</SPINNER>
     </div>

@@ -1,4 +1,4 @@
-import React, { ReactText } from "react";
+import React from "react";
 import Burger from "../../component/Burger/Burger";
 import BuildControls from "../../component/Burger/BuildControls/BuildControls";
 import Modal from "../../component/shared/Modal/Modal";
@@ -29,6 +29,8 @@ interface State {
 }
 
 export default class BurgerBuilder extends React.Component<{}, State> {
+  private isMountedComp = false;
+
   public state = {
     ingredients: {},
     ingredientPrices: {
@@ -44,26 +46,33 @@ export default class BurgerBuilder extends React.Component<{}, State> {
   };
 
   public componentDidMount(): void {
+    this.isMountedComp = true;
     this.setState({
-      loading: true,
+      loading: true
     });
 
     axiosServices.get("/ingredients.json")
       .then((response) => {
-        this.setState({
-          loading: false,
-          ingredients: response.data,
-        })
+        if (this.isMountedComp) {
+          this.setState({
+            loading: false,
+            ingredients: Object.assign({}, response.data),
+          })
+        }
       })
       .catch(error => {
-
+        console.log(error)
       })
+  }
+
+  public componentWillUnmount() {
+    this.isMountedComp = false;
   }
 
   public handleAddIngredients = (event:React.MouseEvent<HTMLButtonElement, MouseEvent>):void => {
     const label = event.currentTarget.dataset.ingredient;
 
-    if (label && Object.keys(this.state.ingredients)) {
+    if (label && Object.keys(this.state.ingredients).length) {
        const newIngredients = { ...this.state.ingredients };
       const initialPrice = this.state.initialPrice;
       newIngredients[label] = newIngredients[label] + 1;
@@ -83,7 +92,7 @@ export default class BurgerBuilder extends React.Component<{}, State> {
 
   public handleRemoveIngredients = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     const label = event.currentTarget.dataset.ingredient;
-    if (label) {
+    if (label && Object.keys(this.state.ingredients).length) {
       const newIngredients = { ...this.state.ingredients };
       const initialPrice = this.state.initialPrice;
       newIngredients[label] = this.state.ingredients[label] - 1;
@@ -157,30 +166,35 @@ export default class BurgerBuilder extends React.Component<{}, State> {
   };
 
   public render() {
-    let burgerLayout = (
-      <>
-        <Burger ingredients={this.state.ingredients} />
-        <BuildControls
+    let orderSummary;
+    let burgerLayout = <Spinner classNames={{top: "30%", background: "orange" }} />
+    
+    if (!this.state.loading && Object.keys(this.state.ingredients).length) {
+      console.log('---------------',this.state)
+      burgerLayout = (
+        <>
+          <Burger ingredients={this.state.ingredients} />
+          <BuildControls
+              ingredients={this.state.ingredients}
+              ingredientPrices={this.state.ingredientPrices}
+              orderPrice={this.state.orderPrice}
+              addIngredients={this.handleAddIngredients}
+              removeIngredients={this.handleRemoveIngredients}
+              handleShowOrder={this.handleShowOrder}
+          />
+        </>
+      )
+      orderSummary = (
+        <OrderSummary
             ingredients={this.state.ingredients}
-            ingredientPrices={this.state.ingredientPrices}
             orderPrice={this.state.orderPrice}
-            addIngredients={this.handleAddIngredients}
-            removeIngredients={this.handleRemoveIngredients}
-            handleShowOrder={this.handleShowOrder}
-        />
-      </>
-    )
-    let orderSummary = (
-      <OrderSummary
-          ingredients={this.state.ingredients}
-          orderPrice={this.state.orderPrice}
-          handleModalClose={this.handleModalClose}
-          handlePurchase={this.handlePurchase}
-        />
-    )
+            handleModalClose={this.handleModalClose}
+            handlePurchase={this.handlePurchase}
+          />
+      )
+    }
     if (this.state.loading) {
-      orderSummary = <Spinner classNames={false} />;
-      burgerLayout = <Spinner classNames={{top: "30%", background: "orange" }} />
+      orderSummary = <Spinner />;
     }
 
     return (
@@ -190,7 +204,7 @@ export default class BurgerBuilder extends React.Component<{}, State> {
           orderModalShow={this.state.orderModalShow}
           handleModalClose={this.handleModalClose}
         >
-          {orderSummary}
+          { orderSummary }
         </Modal>
       </>
     );

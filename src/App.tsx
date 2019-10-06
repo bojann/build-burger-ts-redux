@@ -10,7 +10,7 @@ class App extends Component {
   public render() {
     return (
       <div className="App">
-        <ErrorBoundary errorMsg={""}>
+        <ErrorBoundary>
             <Layout>
               <Toolbar />
               <BurgerBuilder />
