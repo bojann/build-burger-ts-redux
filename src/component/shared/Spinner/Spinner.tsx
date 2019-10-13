@@ -49,9 +49,7 @@ const SPINNER = styled("div")<any>`
 `
 
 const spinner = ({classNames}: any) => (
-    <div style={{position: "relative", height: "100vh", width: "100vw" }}>
-        <SPINNER classNames={classNames}>Loading...</SPINNER>
-    </div>
+    <SPINNER classNames={classNames}>Loading...</SPINNER>
 )
 
 export default spinner;

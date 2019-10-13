@@ -26,6 +26,7 @@ interface State {
   orderPrice: number;
   orderModalShow: boolean;
   loading: boolean;
+  isPurchased: boolean;
 }
 
 export default class BurgerBuilder extends React.Component<{}, State> {
@@ -43,6 +44,7 @@ export default class BurgerBuilder extends React.Component<{}, State> {
     orderPrice: 5,
     orderModalShow: false,
     loading: false,
+    isPurchased: false,
   };
 
   public componentDidMount(): void {
@@ -146,8 +148,8 @@ export default class BurgerBuilder extends React.Component<{}, State> {
     console.log("Purchase done");
     this.setState({
       loading: true,
+      isPurchased: true,
     })
-    this.handleModalClose();
 
     axiosServices.post("/order.json", order)
     .then(response => {
@@ -163,11 +165,13 @@ export default class BurgerBuilder extends React.Component<{}, State> {
         orderModalShow: false,
       })
     })
+
+    this.handleModalClose();
   };
 
   public render() {
     let orderSummary;
-    let burgerLayout = <Spinner classNames={{top: "30%", background: "orange" }} />
+    let burgerLayout;
     
     if (!this.state.loading && Object.keys(this.state.ingredients).length) {
       console.log('---------------',this.state)
@@ -193,8 +197,15 @@ export default class BurgerBuilder extends React.Component<{}, State> {
           />
       )
     }
-    if (this.state.loading) {
-      orderSummary = <Spinner />;
+    if (this.state.loading && !this.state.isPurchased) {
+      burgerLayout = (
+        <div style={{position: "relative", height: "100vh", width: "100vw" }}>
+          <Spinner classNames={{top: "30%", background: "orange" }} />
+          </div>
+      )
+    } 
+    if (this.state.loading && this.state.isPurchased) {
+      orderSummary = <Spinner classNames={{top: "30%", background: "orange" }} />
     }
 
     return (

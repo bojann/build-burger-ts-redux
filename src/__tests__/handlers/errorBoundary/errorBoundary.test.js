@@ -11,6 +11,15 @@ class BrokenFakeComponent extends React.Component {
     }
 }
 
+beforeEach(() => {
+    jest.spyOn(console, "error")
+    console.error.mockImplementation(() => {})
+})
+
+afterEach(() => {
+    console.error.mockRestore()
+})
+
 describe("++++++++++++ ErrorBoundary tests", () => {
     test("show component if no render errors", () => {
         const { container } = render(
@@ -23,7 +32,7 @@ describe("++++++++++++ ErrorBoundary tests", () => {
     });
 
     test("show default error message when render app breaks", () => {
-        const { getByText, container } = render(
+        const { getByText } = render(
             <ErrorBoundary>
                 <Layout>
                     <BrokenFakeComponent />
@@ -32,12 +41,20 @@ describe("++++++++++++ ErrorBoundary tests", () => {
         )
         
         expect(getByText("Something went wrong.")).toBeVisible();
-        expect(container).toThrowError();
+        expect(getByText("Something went wrong.")).toBeInTheDocument();
     });
 
-    // test("show custom error message when render app breaks", () => {
-    //     const error = render(<ErrorBoundary />)
+    test("show custom error message when render app breaks", () => {
+        const { getByText, container } = render(
+            <ErrorBoundary errorMsg="ERROR MESSAGE">
+                <Layout>
+                    <BrokenFakeComponent />
+                </Layout>
+            </ErrorBoundary>
+        )
 
-    // });
+        expect(getByText("ERROR MESSAGE")).toBeInTheDocument();
+        expect(getByText("ERROR MESSAGE")).toBeVisible();
+    });
 })
 
