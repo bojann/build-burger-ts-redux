@@ -1,6 +1,6 @@
 import React from "react"
 import { render } from "@testing-library/react"
-import ErrorBoundary from "../../../Handlers/ErrorBoundary/ErrorBoundary";
+import ErrorBoundary from "../../../Handlers/Errors/ErrorBoundary";
 import Layout from "../../../component/Layout/Layout";
 
 class BrokenFakeComponent extends React.Component {

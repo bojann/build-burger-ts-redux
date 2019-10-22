@@ -5,6 +5,7 @@ import Modal from "../../component/shared/Modal/Modal";
 import OrderSummary from "../../component/Burger/OrderSummery/OrderSummery";
 import axiosServices from "../../services/shared/axios-service";
 import Spinner from "../../component/shared/Spinner/Spinner"
+import ErrorModal from "../../Handlers/Errors/ErrorModal";
 
 export interface IngredientsTypes {
   salad?: number;
@@ -24,9 +25,11 @@ interface State {
   ingredientPrices: IngredientPrices;
   initialPrice: number;
   orderPrice: number;
-  orderModalShow: boolean;
+  modalShow: boolean;
   loading: boolean;
   isPurchased: boolean;
+  isError: boolean;
+  errorMsg: string | undefined;
 }
 
 export default class BurgerBuilder extends React.Component<{}, State> {
@@ -42,16 +45,15 @@ export default class BurgerBuilder extends React.Component<{}, State> {
     },
     initialPrice: 5,
     orderPrice: 5,
-    orderModalShow: false,
-    loading: false,
+    modalShow: false,
+    loading: true,
     isPurchased: false,
+    isError: false,
+    errorMsg: undefined,
   };
 
   public componentDidMount(): void {
     this.isMountedComp = true;
-    this.setState({
-      loading: true
-    });
 
     axiosServices.get("/ingredients.json")
       .then((response) => {
@@ -63,7 +65,19 @@ export default class BurgerBuilder extends React.Component<{}, State> {
         }
       })
       .catch(error => {
-        console.log(error)
+        console.error(error)
+        // this.setState({
+        //   isError: true,
+        //   loading: false,
+        // })
+        setTimeout(() => {
+          if (this.isMountedComp) {
+            this.setState({
+              isError: true,
+              loading: false,
+            })
+          }
+        }, 3000)
       })
   }
 
@@ -119,16 +133,16 @@ export default class BurgerBuilder extends React.Component<{}, State> {
 
   public handleShowOrder = () => {
     this.setState(
-      (prevState: { orderModalShow: boolean }): any => {
+      (prevState: { modalShow: boolean }): any => {
         return {
-          orderModalShow: !prevState.orderModalShow
+          modalShow: !prevState.modalShow
         };
       }
     );
   };
 
   public handleModalClose = () => {
-    this.setState({ orderModalShow: false });
+    this.setState({ modalShow: false });
   };
 
   public handlePurchase = () => {
@@ -155,14 +169,14 @@ export default class BurgerBuilder extends React.Component<{}, State> {
     .then(response => {
       this.setState({
         loading: false,
-        orderModalShow: false,
+        modalShow: false,
       })
     })
     .catch(error => {
       console.error(error)
       this.setState({
         loading: false,
-        orderModalShow: false,
+        modalShow: false,
       })
     })
 
@@ -173,7 +187,9 @@ export default class BurgerBuilder extends React.Component<{}, State> {
     let orderSummary;
     let burgerLayout;
     
-    if (!this.state.loading && Object.keys(this.state.ingredients).length) {
+    if (!this.state.loading
+        && Object.keys(this.state.ingredients).length
+      ) {
       console.log('---------------',this.state)
       burgerLayout = (
         <>
@@ -208,11 +224,19 @@ export default class BurgerBuilder extends React.Component<{}, State> {
       orderSummary = <Spinner classNames={{top: "30%", background: "orange" }} />
     }
 
+    if (this.state.isError) {
+      return <ErrorModal 
+        errorMsg={this.state.errorMsg} 
+        modalShow={true}
+        handleModalClose={this.handleModalClose}
+      />
+    }
+
     return (
       <>
         { burgerLayout }
         <Modal
-          orderModalShow={this.state.orderModalShow}
+          modalShow={this.state.modalShow}
           handleModalClose={this.handleModalClose}
         >
           { orderSummary }

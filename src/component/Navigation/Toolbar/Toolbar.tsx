@@ -1,6 +1,7 @@
 import React from "react";
 import styled from '@emotion/styled';
-import Logo from "../../shared/Logo/Logo"
+import Logo from "../../shared/Logo/Logo";
+import {NavLink} from "react-router-dom";
 
 interface Props {}
 
@@ -22,11 +23,39 @@ const HEADER = styled.header`
     }
 `
 
+const NAV = styled.nav`
+    &>li {
+        margin: 5px;
+        list-style: none;
+        display: inline-block;
+    }
+    &>li>a {
+        color: #ffe100;
+        text-decoration: none;
+        text-transform: uppercase;
+    }
+    &>li>a.active {
+        color: #ffa500;
+        font-weight: 500;
+        text-decoration: underline;
+    }
+`
+
 const toolbar = (props: Props) => (
     <HEADER>
         <div>MENU</div>
         <div className="logo"><Logo /></div>
-        <nav>...</nav>
+        <NAV>
+            <li>
+                <NavLink exact={true} to="/">Create Burger</NavLink>
+            </li>
+            <li>
+                <NavLink to="/order">Order</NavLink>
+            </li>
+            <li>
+                <NavLink to="/contact">Contact</NavLink>
+            </li>
+        </NAV>
     </HEADER>
 )
 

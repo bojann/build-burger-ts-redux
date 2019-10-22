@@ -3,23 +3,23 @@ import "./Modal.scss";
 import Backdrop from "../Backdrop/Backdrop";
 
 interface Props {
-  children: ReactNode;
-  orderModalShow: boolean;
+  children: ReactNode | string;
+  modalShow: boolean;
   handleModalClose: () => void;
 }
 
 const Modal = (props: Props) => {
-  const classes = props.orderModalShow
+  const classes = props.modalShow
     ? "modal modal-show"
     : "modal modal-hidden";
-  const testId = props.orderModalShow
+  const testId = props.modalShow
   ? "modal-visible"
   : "modal-hidden";
 
   return (
     <>
       <Backdrop
-        show={props.orderModalShow}
+        show={props.modalShow}
         handleModalClose={props.handleModalClose}
       />
       <div className={classes} data-testid={testId}>{props.children ? props.children : null}</div>

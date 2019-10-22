@@ -26,7 +26,7 @@ const SPINNER = styled("div")<any>`
     position: absolute;
     top: ${ (props: ClassNamesType) => props.classNames && props.classNames.top ? props.classNames.top : "initial" };
     background: ${ (props: ClassNamesType) =>  props.classNames && props.classNames.background ? props.classNames.background : "#da9c2a" };
-    left: calc(50% - 50px);
+    left: calc(50% - 66px);
     margin: 60px auto;
     font-size: 10px;
     text-indent: -9999em;

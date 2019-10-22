@@ -10,8 +10,6 @@ const orderSummary = (
     handlePurchase: () => void;
   }
 ) => {
-  console.log(props.ingredients);
-  console.log(props.orderPrice);
   const renderOrderList = () => {
     const itemList = Object.keys(props.ingredients).map(
       (ingName): JSX.Element => {
