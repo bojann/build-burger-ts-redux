@@ -51,7 +51,6 @@ export default class BurgerBuilder extends React.Component<{}, State> {
     isPurchased: false,
     isError: false,
     errorMsg: undefined,
-    isPurchased: false
   };
 
   public componentDidMount(): void {
