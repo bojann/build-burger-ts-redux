@@ -13,8 +13,8 @@ const Modal = (props: Props) => {
     ? "modal modal-show"
     : "modal modal-hidden";
   const testId = props.modalShow
-  ? "modal-visible"
-  : "modal-hidden";
+      ? "modal-visible"
+      : "modal-hidden";
 
   return (
     <>
@@ -22,7 +22,9 @@ const Modal = (props: Props) => {
         show={props.modalShow}
         handleModalClose={props.handleModalClose}
       />
-      <div className={classes} data-testid={testId}>{props.children ? props.children : null}</div>
+      <div className={classes} data-testid={testId}>
+        {props.children ? props.children : null}
+      </div>
     </>
   );
 };

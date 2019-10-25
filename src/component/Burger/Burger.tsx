@@ -2,7 +2,7 @@ import React from "react";
 import BurgerIngredient from "./BurgerIngredient/BurgerIngredient";
 
 import "./Burger.scss";
-import { IngredientsTypes } from "../../container/BurgerBuilder/BurgerBuilder"
+import { IngredientsTypes } from "../../container/BurgerBuilder/BurgerBuilder";
 
 interface IngredientsTypesObj {
   ingredients: IngredientsTypes;

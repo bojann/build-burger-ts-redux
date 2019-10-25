@@ -1,16 +1,16 @@
-import React from "react"
-import styled from "@emotion/styled"
+import React from "react";
+import styled from "@emotion/styled";
 import { keyframes } from "@emotion/core";
 
 interface ClassNamesPropType {
-    top?: string,
-    background?: string, 
+  top?: string;
+  background?: string;
 }
 type ClassNamesType = {
-    classNames: ClassNamesPropType,
-}
+  classNames: ClassNamesPropType;
+};
 
-const SpinAnimation= keyframes`
+const SpinAnimation = keyframes`
     {
         0% {
             -webkit-transform: rotate(0deg);
@@ -21,7 +21,7 @@ const SpinAnimation= keyframes`
             transform: rotate(360deg);
         }
     }
-`
+`;
 const SPINNER = styled("div")<any>`
     position: absolute;
     top: ${ (props: ClassNamesType) => props.classNames && props.classNames.top ? props.classNames.top : "initial" };
@@ -41,16 +41,16 @@ const SPINNER = styled("div")<any>`
     animation: ${SpinAnimation} 1.1s infinite linear;
     z-index: 900;
 
-    &, &:after {
+    &,
+    &:after {
         border-radius: 50%;
         width: 100px;
         height: 100px;
     }
-`
+`;
 
-const spinner = ({classNames}: any) => (
-    <SPINNER classNames={classNames}>Loading...</SPINNER>
-)
+const spinner = ({ classNames }: any) => (
+  <SPINNER classNames={classNames}>Loading...</SPINNER>
+);
 
 export default spinner;
-

@@ -6,8 +6,9 @@ import CustomButton from "../../../component/shared/CustomButton/CustomButton";
 
 const orderSummary = (
   props: IngredientTypes & {
-    handleModalClose: () => void;
+    handleModalClose?: () => void;
     handlePurchase: () => void;
+    redirectPage?: () => void;
   }
 ) => {
   const renderOrderList = () => {
@@ -23,6 +24,11 @@ const orderSummary = (
     return itemList;
   };
 
+  const handleClose = () => {
+      const redirectPage = props.redirectPage ? props.redirectPage : () => false;
+      return props.handleModalClose ? props.handleModalClose() : redirectPage();
+  };
+
   return (
     <>
       <h3>Your order is burger with:</h3>
@@ -30,12 +36,12 @@ const orderSummary = (
       <p>
         <strong>Total price: {props.orderPrice}</strong>
       </p>
-      <button onClick={props.handleModalClose} className="btn-close">
+      <button onClick={handleClose} className="btn-close">
         X
       </button>
       <CustomButton
         btnType="btn-danger"
-        handleBtnClick={props.handleModalClose}
+        handleBtnClick={handleClose}
       >
         Cancel
       </CustomButton>

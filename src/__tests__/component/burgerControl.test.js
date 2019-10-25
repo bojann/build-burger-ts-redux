@@ -4,12 +4,7 @@ import BuildControl from "../../component/Burger/BuildControls/BuildControl/Buil
 
 describe("+++++ BurgerControl", () => {
   test("build control matches the snapshot", () => {
-    const { container } = render(
-      <BuildControl
-        label={"bacon"}
-        price={10}
-      />
-    );
+    const { container } = render(<BuildControl label={"bacon"} price={10} />);
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div

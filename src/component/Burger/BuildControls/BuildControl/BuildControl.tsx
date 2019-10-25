@@ -15,10 +15,18 @@ const BuildControl = (props: BuildBurgerTypes & EventHandlersTypes) => {
       <span className="ingredient-label">
         {label} ( ${price} )
       </span>
-      <button className="btn btn-less" data-ingredient={label} onClick={removeIngredients}>
+      <button
+        className="btn btn-less"
+        data-ingredient={label}
+        onClick={removeIngredients}
+      >
         Less
       </button>
-      <button className="btn btn-more" data-ingredient={label} onClick={addIngredients}>
+      <button
+        className="btn btn-more"
+        data-ingredient={label}
+        onClick={addIngredients}
+      >
         More
       </button>
     </div>

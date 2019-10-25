@@ -1,5 +1,5 @@
 import React from "react";
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 import Logo from "../../shared/Logo/Logo";
 import {NavLink} from "react-router-dom";
 
@@ -21,7 +21,7 @@ const HEADER = styled.header`
     & > .logo {
         width 60px;
     }
-`
+`;
 
 const NAV = styled.nav`
     &>li {

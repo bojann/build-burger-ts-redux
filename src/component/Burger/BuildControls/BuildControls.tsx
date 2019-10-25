@@ -3,19 +3,25 @@ import BuildControl, { BuildBurgerTypes } from "./BuildControl/BuildControl";
 import "./BuildControls.scss";
 
 export interface IngredientTypes {
-  ingredients: {
-    cheese: number;
-    bacon: number;
-    salad: number;
-    meat: number;
-    [key: string]: number;
-  } | {};
+  ingredients:
+    | {
+        cheese: number;
+        bacon: number;
+        salad: number;
+        meat: number;
+        [key: string]: number;
+      }
+    | {};
   orderPrice: number;
 }
 
 export interface EventHandlersTypes {
-  addIngredients: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-  removeIngredients: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  addIngredients: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void;
+  removeIngredients: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void;
   handleShowOrder?: () => void;
 }
 
@@ -46,7 +52,7 @@ const BuildControls = (
       ) : null;
     });
   };
-  console.log('props.orderPrice',props.orderPrice)
+  console.log("props.orderPrice", props.orderPrice);
   const totalPriceNum = props.orderPrice ? props.orderPrice.toFixed(2) : 0;
 
   return (
