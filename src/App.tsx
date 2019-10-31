@@ -11,21 +11,30 @@ import {
   Route,
   Switch,
 } from "react-router-dom";
+import {BurgerContextProvider, BurgerContextConsumer} from "./context/BurgerContext";
+
 class App extends Component {
   public render() {
     return (
       <div className="App">
-        <ErrorBoundary errorMsg="">
-          <Router>
-            <Layout>
-                <Toolbar />
-              <Switch>
-                <Route exact={true}  path="/"  component={ BurgerBuilder } />
-                <Route path="/order"  component={ Order } />
-              </Switch>
-            </Layout>
-          </Router>
-        </ErrorBoundary>
+        <BurgerContextProvider>
+          <ErrorBoundary errorMsg="">
+            <Router>
+              <Layout>
+                  <Toolbar />
+                <Switch>
+                  {/*<Route exact={true} path="/" component={ BurgerBuilder } />*/}
+                  <Route exact={true} path="/" render={
+                    (props) => <BurgerContextConsumer>{ (value:any) => <BurgerBuilder {...value} {...props} /> }</BurgerContextConsumer>
+                  } />
+                  <Route path="/order" render={
+                    (props) => <BurgerContextConsumer>{ (value:any) => <Order {...value} {...props} /> }</BurgerContextConsumer>
+                  } />
+                </Switch>
+              </Layout>
+            </Router>
+          </ErrorBoundary>
+        </BurgerContextProvider>
       </div>
     );
   }

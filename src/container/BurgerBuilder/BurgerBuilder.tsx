@@ -7,6 +7,7 @@ import axiosServices from "../../services/shared/axios-service";
 import Spinner from "../../component/shared/Spinner/Spinner"
 import ErrorModal from "../../Handlers/Errors/ErrorModal";
 import Checkout from "../../component/Checkout/Checkout"
+import {BrowserRouterProps, RouteComponentProps} from "react-router-dom";
 
 export interface IngredientsTypes {
   salad?: number;
@@ -20,32 +21,29 @@ interface IngredientPrices {
   bacon: number;
   cheese: number;
   meat: number;
+  [key: string]: number;
 }
 interface State {
-  ingredients: IngredientsTypes | {};
-  ingredientPrices: IngredientPrices;
-  initialPrice: number;
-  orderPrice: number;
   modalShow: boolean;
   loading: boolean;
   isPurchased: boolean;
   isError: boolean;
   errorMsg: string | undefined;
 }
+interface Props {
+  ingredients: IngredientsTypes | {};
+  ingredientPrices: IngredientPrices;
+  initialPrice: number;
+  orderPrice: number;
+  loading: boolean;
+  isError: boolean;
+  updateBurgerContextState: (stateObj: any) => void;
+}
 
-export default class BurgerBuilder extends React.Component<{}, State> {
-  private isMountedComp = false;
+export default class BurgerBuilder extends React.Component<Props & BrowserRouterProps, State> {
+  // private isMountedComp = false;
 
   public state = {
-    ingredients: {},
-    ingredientPrices: {
-      salad: 0.5,
-      bacon: 0.65,
-      cheese: 1,
-      meat: 2.2
-    },
-    initialPrice: 5,
-    orderPrice: 5,
     modalShow: false,
     loading: true,
     isPurchased: false,
@@ -53,60 +51,60 @@ export default class BurgerBuilder extends React.Component<{}, State> {
     errorMsg: undefined,
   };
 
-  public componentDidMount(): void {
-    this.isMountedComp = true;
+  // public componentDidMount(): void {
+  //   this.isMountedComp = true;
+  //
+  //   axiosServices
+  //     .get("/ingredients.json")
+  //     .then(response => {
+  //       if (this.isMountedComp) {
+  //         this.setState({
+  //           loading: false,
+  //           ingredients: Object.assign({}, response.data),
+  //         });
+  //       }
+  //     })
+  //     .catch(error => {
+  //       console.error(error)
+  //       // this.setState({
+  //       //   isError: true,
+  //       //   loading: false,
+  //       // })
+  //       setTimeout(() => {
+  //         if (this.isMountedComp) {
+  //           this.setState({
+  //             isError: true,
+  //             loading: false,
+  //           })
+  //         }
+  //       }, 3000)
+  //     })
+  // }
 
-    axiosServices
-      .get("/ingredients.json")
-      .then(response => {
-        if (this.isMountedComp) {
-          this.setState({
-            loading: false,
-            ingredients: Object.assign({}, response.data),
-          });
-        }
-      })
-      .catch(error => {
-        console.error(error)
-        // this.setState({
-        //   isError: true,
-        //   loading: false,
-        // })
-        setTimeout(() => {
-          if (this.isMountedComp) {
-            this.setState({
-              isError: true,
-              loading: false,
-            })
-          }
-        }, 3000)
-      })
-  }
-
-  public componentWillUnmount() {
-    this.isMountedComp = false;
-  }
+  // public componentWillUnmount() {
+  //   this.isMountedComp = false;
+  // }
 
   public handleAddIngredients = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void => {
     const label = event.currentTarget.dataset.ingredient;
 
-    if (label && Object.keys(this.state.ingredients).length) {
-      const newIngredients = { ...this.state.ingredients };
-      const initialPrice = this.state.initialPrice;
+    if (label && Object.keys(this.props.ingredients).length) {
+      const newIngredients = { ...this.props.ingredients };
+      const initialPrice = this.props.initialPrice;
       newIngredients[label] = newIngredients[label] + 1;
 
       const updatePriceSum = Object.keys(newIngredients)
         .map(
-          ingKey => this.state.ingredientPrices[ingKey] * newIngredients[ingKey]
+          ingKey => this.props.ingredientPrices[ingKey] * newIngredients[ingKey]
         )
         .reduce((acc, curr) => {
           const total = acc + curr;
           return Number(total.toFixed(2));
         }, initialPrice);
 
-      this.setState({
+      this.props.updateBurgerContextState({
         ingredients: newIngredients,
         orderPrice: updatePriceSum
       });
@@ -117,23 +115,23 @@ export default class BurgerBuilder extends React.Component<{}, State> {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void => {
     const label = event.currentTarget.dataset.ingredient;
-    if (label && Object.keys(this.state.ingredients).length) {
-      const newIngredients = { ...this.state.ingredients };
-      const initialPrice = this.state.initialPrice;
-      newIngredients[label] = this.state.ingredients[label] - 1;
+    if (label && Object.keys(this.props.ingredients).length) {
+      const newIngredients = { ...this.props.ingredients };
+      const initialPrice = this.props.initialPrice;
+      newIngredients[label] = this.props.ingredients[label] - 1;
 
-      if (this.state.ingredients[label]) {
+      if (this.props.ingredients[label]) {
         const updatePriceSum = Object.keys(newIngredients)
           .map(
             ingKey =>
-              this.state.ingredientPrices[ingKey] * newIngredients[ingKey]
+              this.props.ingredientPrices[ingKey] * newIngredients[ingKey]
           )
           .reduce((acc, curr) => {
             const total = acc + curr;
             return Number(total.toFixed(2));
           }, initialPrice);
 
-        this.setState({
+        this.props.updateBurgerContextState({
           ingredients: newIngredients,
           orderPrice: updatePriceSum
         });
@@ -157,8 +155,8 @@ export default class BurgerBuilder extends React.Component<{}, State> {
 
   public handlePurchase = () => {
     const order = {
-      ingredients: this.state.ingredients,
-      price: this.state.orderPrice,
+      ingredients: this.props.ingredients,
+      price: this.props.orderPrice,
       customer: {
         name: "Jan Kowalski",
         address: {
@@ -188,26 +186,28 @@ export default class BurgerBuilder extends React.Component<{}, State> {
         loading: false,
         modalShow: false,
       })
-    })
+    });
 
     this.handleModalClose();
   };
 
   public render() {
+    const {ingredients, orderPrice } = this.props;
     let orderSummary;
     let burgerLayout;
+    console.log('%c log BA: ', 'background: orange;', this.props);
 
-    if (!this.state.loading
-        && Object.keys(this.state.ingredients).length
+    if (!this.props.loading
+        && Object.keys(this.props.ingredients).length
       ) {
       console.log('---------------',this.state);
       burgerLayout = (
         <>
-          <Burger ingredients={this.state.ingredients} />
+          <Burger ingredients={this.props.ingredients} />
           <BuildControls
-            ingredients={this.state.ingredients}
-            ingredientPrices={this.state.ingredientPrices}
-            orderPrice={this.state.orderPrice}
+            ingredients={this.props.ingredients}
+            ingredientPrices={this.props.ingredientPrices}
+            orderPrice={this.props.orderPrice}
             addIngredients={this.handleAddIngredients}
             removeIngredients={this.handleRemoveIngredients}
             handleShowOrder={this.handleShowOrder}
@@ -216,21 +216,21 @@ export default class BurgerBuilder extends React.Component<{}, State> {
       );
       orderSummary = (
         <OrderSummary
-          ingredients={this.state.ingredients}
-          orderPrice={this.state.orderPrice}
+          ingredients={this.props.ingredients}
+          orderPrice={this.props.orderPrice}
           handleModalClose={this.handleModalClose}
           handlePurchase={this.handlePurchase}
         />
       );
     }
-    if (this.state.loading && !this.state.isPurchased) {
+    if (this.props.loading && !this.state.isPurchased) {
       burgerLayout = (
         <div style={{ position: "relative", height: "100vh", width: "100vw" }}>
           <Spinner classNames={{ top: "30%", background: "orange" }} />
         </div>
       );
     }
-    if (this.state.loading && this.state.isPurchased) {
+    if (this.props.loading && this.state.isPurchased) {
       orderSummary = (
         <Spinner classNames={{ top: "30%", background: "orange" }} />
       );
@@ -248,10 +248,10 @@ export default class BurgerBuilder extends React.Component<{}, State> {
       <>
         {burgerLayout}
         {
-          this.state.ingredients &&
+          this.props.ingredients &&
           <Checkout
-              ingredients={this.state.ingredients}
-              orderPrice={this.state.orderPrice}
+              ingredients={ingredients}
+              orderPrice={orderPrice}
               handlePurchase={this.handlePurchase}
           />
         }
