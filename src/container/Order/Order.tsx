@@ -1,8 +1,15 @@
-import React from "react"
+import React, {useState} from "react"
 
-export default class Order extends React.Component {
+const Order = (props) => {
+    const [count, setCount] = useState(0);
+    console.log('%c log Order BA: ', 'background: orange;', props);
 
-    public render() {
-        return(<></>)
-    }
-}
+    return(
+        <>
+            
+
+        </>
+    )
+};
+
+export default Order;

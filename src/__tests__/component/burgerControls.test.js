@@ -46,9 +46,18 @@ describe("+++++++ BurgerControls features", () => {
 
     expect(modalBox).toBeTruthy();
 
+<<<<<<< HEAD
     fireEvent.click(orderNow);
     rerender(<Modal orderModalShow={true} />);
     expect(handleShowOrder).toHaveBeenCalledTimes(1);
     expect(getByTestId("modal-visible")).toBeTruthy();
   });
 });
+=======
+        fireEvent.click(orderNow);
+        rerender(<Modal modalShow={true} />)
+        expect(handleShowOrder).toHaveBeenCalledTimes(1);
+        expect(getByTestId('modal-visible')).toBeTruthy();
+    }) 
+})
+>>>>>>> a83b1f2... add burger context API

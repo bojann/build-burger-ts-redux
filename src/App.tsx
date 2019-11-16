@@ -23,7 +23,6 @@ class App extends Component {
               <Layout>
                   <Toolbar />
                 <Switch>
-                  {/*<Route exact={true} path="/" component={ BurgerBuilder } />*/}
                   <Route exact={true} path="/" render={
                     (props) => <BurgerContextConsumer>{ (value:any) => <BurgerBuilder {...value} {...props} /> }</BurgerContextConsumer>
                   } />

@@ -7,7 +7,7 @@ import axiosServices from "../../services/shared/axios-service";
 import Spinner from "../../component/shared/Spinner/Spinner"
 import ErrorModal from "../../Handlers/Errors/ErrorModal";
 import Checkout from "../../component/Checkout/Checkout"
-import {BrowserRouterProps, RouteComponentProps} from "react-router-dom";
+import {BrowserRouterProps} from "react-router-dom";
 
 export interface IngredientsTypes {
   salad?: number;
@@ -37,6 +37,8 @@ interface Props {
   orderPrice: number;
   loading: boolean;
   isError: boolean;
+  burgerCount: number;
+  basket: IngredientsTypes[],
   updateBurgerContextState: (stateObj: any) => void;
 }
 
@@ -50,40 +52,6 @@ export default class BurgerBuilder extends React.Component<Props & BrowserRouter
     isError: false,
     errorMsg: undefined,
   };
-
-  // public componentDidMount(): void {
-  //   this.isMountedComp = true;
-  //
-  //   axiosServices
-  //     .get("/ingredients.json")
-  //     .then(response => {
-  //       if (this.isMountedComp) {
-  //         this.setState({
-  //           loading: false,
-  //           ingredients: Object.assign({}, response.data),
-  //         });
-  //       }
-  //     })
-  //     .catch(error => {
-  //       console.error(error)
-  //       // this.setState({
-  //       //   isError: true,
-  //       //   loading: false,
-  //       // })
-  //       setTimeout(() => {
-  //         if (this.isMountedComp) {
-  //           this.setState({
-  //             isError: true,
-  //             loading: false,
-  //           })
-  //         }
-  //       }, 3000)
-  //     })
-  // }
-
-  // public componentWillUnmount() {
-  //   this.isMountedComp = false;
-  // }
 
   public handleAddIngredients = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -153,41 +121,58 @@ export default class BurgerBuilder extends React.Component<Props & BrowserRouter
     this.setState({ modalShow: false });
   };
 
+  public handleAddToBasket = () => {
+    const newCount = this.props.burgerCount + 1;
+    const currentBurger = this.props.ingredients;
+    const currentBasket = this.props.basket;
+    const newBasket = [...currentBasket, currentBurger];
+    
+    this.props.updateBurgerContextState({
+      burgerCount: newCount,
+      loading: false,
+      basket: newBasket,
+      isAdded: true,
+    });
+
+    this.handleModalClose();
+  }
+
   public handlePurchase = () => {
-    const order = {
-      ingredients: this.props.ingredients,
-      price: this.props.orderPrice,
-      customer: {
-        name: "Jan Kowalski",
-        address: {
-          street: "test1",
-          zipCode: "2132",
-          country: "Poland"
-        }
-      },
-      deliveryMethod: "fast"
-    };
-    console.log("Purchase done");
-    this.setState({
-      loading: true,
-      isPurchased: true
-    });
+    // TODO: move this to Checkout step where purchase able
+    // const order = {
+    //   ingredients: this.props.ingredients,
+    //   price: this.props.orderPrice,
+    //   customer: {
+    //     name: "Jan Kowalski",
+    //     address: {
+    //       street: "test1",
+    //       zipCode: "2132",
+    //       country: "Poland"
+    //     }
+    //   },
+    //   deliveryMethod: "fast"
+    // };
+    // console.log("Purchase done");
+    // this.setState({
+    //   loading: true,
+    //   isPurchased: true
+    // });
 
-    axiosServices.post("/order.json", order)
-    .then(response => {
-      this.setState({
-        loading: false,
-        modalShow: false,
-      })
-    })
-    .catch(error => {
-      console.error(error);
-      this.setState({
-        loading: false,
-        modalShow: false,
-      })
-    });
-
+    // axiosServices.post("/order.json", order)
+    //   .then(response => {
+    //     this.setState({
+    //       loading: false,
+    //       modalShow: false,
+    //     })
+    //   })
+    //   .catch(error => {
+    //     console.error(error);
+    //     this.setState({
+    //       loading: false,
+    //       modalShow: false,
+    //     })
+    //   });
+    console.log('%c log BA: handlePurchase $$$$ ', 'background: orange;');
     this.handleModalClose();
   };
 
@@ -220,6 +205,7 @@ export default class BurgerBuilder extends React.Component<Props & BrowserRouter
           orderPrice={this.props.orderPrice}
           handleModalClose={this.handleModalClose}
           handlePurchase={this.handlePurchase}
+          handleAddToBasket={this.handleAddToBasket}
         />
       );
     }

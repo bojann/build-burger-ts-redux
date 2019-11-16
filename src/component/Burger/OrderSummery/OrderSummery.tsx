@@ -9,6 +9,7 @@ const orderSummary = (
     handleModalClose?: () => void;
     handlePurchase: () => void;
     redirectPage?: () => void;
+    handleAddToBasket?: () => void;
   }
 ) => {
   const renderOrderList = () => {
@@ -44,6 +45,9 @@ const orderSummary = (
         handleBtnClick={handleClose}
       >
         Cancel
+      </CustomButton>
+      <CustomButton btnType="btn-success" handleBtnClick={props.handleAddToBasket}>
+        Add to Basket
       </CustomButton>
       <CustomButton btnType="btn-success" handleBtnClick={props.handlePurchase}>
         Go to Checkout
