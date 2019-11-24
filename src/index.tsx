@@ -1,30 +1,33 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import App from "./App";
+import Apps from "./Apps";
 // import { Provider } from 'react-redux';
 // import configureStore from 'state/store';
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
+import AuthContextProvider from "./context/AuthContext";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<Apps />, document.getElementById("root"));
 
 const render = (Component: React.ComponentType) => {
   return ReactDOM.render(
-    <BrowserRouter>
-      <Component />
-    </BrowserRouter>,
+    <AuthContextProvider>
+      <BrowserRouter>
+        <Component />
+      </BrowserRouter>
+    </AuthContextProvider>,
     document.getElementById("root")
   );
 };
 
-render(App);
+render(Apps);
 
 declare const module: any;
 
 if (module.hot) {
-  module.hot.accept("./App", () => {
-    const NextApp = require("./App").default;
+  module.hot.accept("./Apps", () => {
+    const NextApp = require("./Apps").default;
     render(NextApp);
   });
 }

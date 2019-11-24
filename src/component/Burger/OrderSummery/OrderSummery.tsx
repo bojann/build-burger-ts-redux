@@ -37,9 +37,6 @@ const orderSummary = (
       <p>
         <strong>Total price: {props.orderPrice}</strong>
       </p>
-      <button onClick={handleClose} className="btn-close">
-        X
-      </button>
       <CustomButton
         btnType="btn-danger"
         handleBtnClick={handleClose}

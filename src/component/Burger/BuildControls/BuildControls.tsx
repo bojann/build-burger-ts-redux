@@ -22,7 +22,7 @@ export interface EventHandlersTypes {
   removeIngredients: (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void;
-  handleShowOrder?: () => void;
+  showOrder?: () => void;
 }
 
 export interface IngredientPrices {
@@ -61,7 +61,7 @@ const BuildControls = (
         Total Price: <span data-testid="total-price">$ {totalPriceNum}</span>
       </span>
       {renderControls()}
-      <button className="btn order-btn" onClick={props.handleShowOrder}>
+      <button className="btn order-btn" onClick={props.showOrder}>
         Order now
       </button>
     </div>

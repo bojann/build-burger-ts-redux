@@ -2,7 +2,7 @@ import React, { Component,useContext } from "react";
 import "./App.scss";
 
 import Layout from "./component/Layout/Layout";
-import BurgerBuilder from "./container/BurgerBuilder/BurgerBuilder";
+import BurgersBuilder from "./container/BurgerBuilder/BurgersBuilder";
 import Toolbar from "./component/Navigation/Toolbar/Toolbar"
 import Order from "./container/Order/Order";
 import ErrorBoundary from "./Handlers/Errors/ErrorBoundary";
@@ -13,7 +13,7 @@ import {
   Route,
   Switch,
 } from "react-router-dom";
-import {BurgerContextProvider, BurgerContextConsumer} from "./context/BurgerContext";
+import {BurgersContextProvider, BurgersContextConsumer} from "./context/BurgersContext";
 
 const App = () => {
   const authContext = useContext(AuthContext);
@@ -24,23 +24,21 @@ const App = () => {
 
   return (
     <div className="App">
-      <BurgerContextProvider>
+      <BurgersContextProvider>
         <ErrorBoundary errorMsg="">
           <Router>
             <Layout>
                 <Toolbar />
               <Switch>
-                <Route exact={true} path="/" render={
-                  (props) => <BurgerContextConsumer>{ (value:any) => <BurgerBuilder {...value} {...props} /> }</BurgerContextConsumer>
-                } />
+                <Route exact={true} path="/" component={BurgersBuilder} />
                 <Route path="/order" render={
-                  (props) => <BurgerContextConsumer>{ (value:any) => <Order {...value} {...props} /> }</BurgerContextConsumer>
+                  (props) => <BurgersContextConsumer>{ (value) => <Order {...value} {...props} /> }</BurgersContextConsumer>
                 } />
               </Switch>
             </Layout>
           </Router>
         </ErrorBoundary>
-      </BurgerContextProvider>
+      </BurgersContextProvider>
     </div>
   );
 }

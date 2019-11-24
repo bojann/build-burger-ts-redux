@@ -37,7 +37,6 @@ interface Props {
   orderPrice: number;
   loading: boolean;
   isError: boolean;
-  burgerCount: number;
   basket: IngredientsTypes[],
   updateBurgerContextState: (stateObj: any) => void;
 }
@@ -71,6 +70,31 @@ export default class BurgerBuilder extends React.Component<Props & BrowserRouter
           const total = acc + curr;
           return Number(total.toFixed(2));
         }, initialPrice);
+
+      const order = {
+        ingredients: this.props.ingredients,
+        price: this.props.orderPrice,
+        customer: {
+          name: "Jan",
+          surname: "Kowalski",
+          email: "testotest@net.com",
+        },
+        deliveryMethod: "fast"
+      };
+      axiosServices.post("/order.json", order)
+        .then(response => {
+          this.setState({
+            loading: false,
+            modalShow: false,
+          })
+        })
+        .catch(error => {
+          console.error(error);
+          this.setState({
+            loading: false,
+            modalShow: false,
+          })
+        });
 
       this.props.updateBurgerContextState({
         ingredients: newIngredients,
@@ -122,13 +146,11 @@ export default class BurgerBuilder extends React.Component<Props & BrowserRouter
   };
 
   public handleAddToBasket = () => {
-    const newCount = this.props.burgerCount + 1;
     const currentBurger = this.props.ingredients;
     const currentBasket = this.props.basket;
     const newBasket = [...currentBasket, currentBurger];
     
     this.props.updateBurgerContextState({
-      burgerCount: newCount,
       loading: false,
       basket: newBasket,
       isAdded: true,
@@ -185,7 +207,6 @@ export default class BurgerBuilder extends React.Component<Props & BrowserRouter
     if (!this.props.loading
         && Object.keys(this.props.ingredients).length
       ) {
-      console.log('---------------',this.state);
       burgerLayout = (
         <>
           <Burger ingredients={this.props.ingredients} />
