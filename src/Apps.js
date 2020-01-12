@@ -8,6 +8,9 @@ import Order from "./container/Order/Order";
 import ErrorBoundary from "./Handlers/Errors/ErrorBoundary";
 import { AuthContext } from "./context/AuthContext";
 import Auth from "./component/User/Auth";
+import Contact from "./container/Contact/Contact";
+import UserContextProvider from "./context/User/UserContext"
+
 import {
   BrowserRouter as Router,
   Route,
@@ -25,19 +28,22 @@ const App = () => {
   return (
     <div className="App">
       <BurgersContextProvider>
-        <ErrorBoundary errorMsg="">
-          <Router>
-            <Layout>
-                <Toolbar />
-              <Switch>
-                <Route exact={true} path="/" component={BurgersBuilder} />
-                <Route path="/order" render={
-                  (props) => <BurgersContextConsumer>{ (value) => <Order {...value} {...props} /> }</BurgersContextConsumer>
-                } />
-              </Switch>
-            </Layout>
-          </Router>
-        </ErrorBoundary>
+        <UserContextProvider>
+          <ErrorBoundary errorMsg="">
+            <Router>
+              <Layout>
+                  <Toolbar />
+                <Switch>
+                  <Route exact={true} path="/" component={BurgersBuilder} />
+                  <Route path="/order" render={
+                    props => <BurgersContextConsumer>{ value => <Order {...value} {...props} /> }</BurgersContextConsumer>
+                  } />
+                  <Route path="/contact" component={Contact} />
+                </Switch>
+              </Layout>
+            </Router>
+          </ErrorBoundary>
+        </UserContextProvider>
       </BurgersContextProvider>
     </div>
   );

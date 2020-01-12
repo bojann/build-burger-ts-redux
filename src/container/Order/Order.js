@@ -54,7 +54,7 @@ const Order = (props) => {
                 setIsError(true);
                 setLoading(false);
             });
-    }, []);
+    }, [setIsError,setLoading,setBasket,setCount]);
 
     const orderList = () => {
         const list = basket.map(ingredients => {
